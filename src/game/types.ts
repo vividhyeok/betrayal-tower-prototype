@@ -1,5 +1,12 @@
-export type Phase='MENU'|'CLASS_SELECT'|'NORMAL_BATTLE'|'BOSS_BATTLE'|'SHELTER'|'DEAD'|'RUN_COMPLETE'
-export type Personality='협력형'|'중립형'|'배신형'
-export type Item={id:string;name:string;type:string;rarity:'낡음'|'일반'|'희귀';value:number;description:string;attackBonus?:number;defenseBonus?:number;hpBonus?:number}
-export type Fighter={name:string;hp:number;maxHp:number;attack:number;defense:number;inventory:Item[]}
-export type GameState={floor:number;stage:number;phase:Phase;player:Fighter;opponent:Fighter|null;enemy:Fighter|null;boss:Fighter|null;storage:Item[];battleLog:string[];fastMode:boolean;personality:Personality;className:string;visibleClass:string;banner:string;notice:string;defending:boolean}
+export type ActorId='p1'|'p2'|'boss'
+export type TargetId='p1'|'p2'|'boss'
+export type ActionKind='ATTACK'|'SKILL'|'DEFEND'|'ITEM'
+export type Phase='CLASS_SELECT'|'BATTLE'|'LOOT'|'END'
+export type SkillData={id:string;name:string;description:string;kind:'damage'|'heal'|'guard';power:number;targets:'enemy'|'player'|'self'}
+export type JobData={id:string;name:string;role:string;description:string;maxHp:number;attack:number;defense:number;speed:number;skills:SkillData[];art:string}
+export type ItemData={id:string;name:string;rarity:'일반'|'희귀'|'영웅';description:string;effect:string;art:string;kind:'potion'|'dice_glove'|'karma_mirror'|'loot'}
+export type Combatant={id:ActorId;name:string;jobId?:string;hp:number;maxHp:number;attack:number;defense:number;speed:number;guarding:boolean;alive:boolean;items:ItemData[];mirrorReady:boolean}
+export type CombatEvent={id:number;text:string;tone?:'damage'|'heal'|'betrayal'|'system';actor?:ActorId;value?:number}
+export type Roll={base:number;bonus:number;total:number}
+export type BattleState={phase:Phase;actors:Record<ActorId,Combatant>;turnQueue:ActorId[];round:number;betrayal:boolean;events:CombatEvent[];banner:string;lootPool:ItemData[];rolls:Partial<Record<'p1'|'p2',Roll>>;draftOrder:('p1'|'p2')[];draftIndex:number;winnerText:string}
+export type BattleAction={actor:ActorId;kind:ActionKind;target?:TargetId;skillId?:string;itemId?:string}
