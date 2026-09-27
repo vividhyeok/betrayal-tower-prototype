@@ -43,3 +43,75 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+
+/* Playtest readability pass: keep the game viewport stable and surface progress/outcomes. */
+.game-shell{
+  height:100dvh;
+  min-height:0;
+  overflow:hidden;
+  grid-template-rows:72px minmax(0,1fr) 100px;
+}
+.game-main{min-height:0;overflow:auto}
+.side{min-height:0;overflow:hidden}
+.inventory{min-height:0}
+.recent-log{min-height:0;overflow:hidden}
+.log-tools{display:flex;gap:4px}
+.log-tools button{padding:5px 7px;font-size:9px}
+.log-modal{height:min(60vh,480px);overflow:auto;padding-right:8px}
+.actions .clear-next{min-width:180px;font-size:12px;letter-spacing:.02em}
+
+.stage-track{
+  grid-template-columns:auto minmax(0,1fr) auto auto;
+  gap:10px;
+}
+.stage-track .track-segments{
+  display:grid;
+  grid-template-columns:repeat(30,minmax(3px,1fr));
+  gap:3px;
+  align-items:center;
+  min-width:0;
+}
+.track-status{
+  min-width:76px;
+  font-weight:700!important;
+  color:#dbe3e8!important;
+  letter-spacing:.09em!important;
+}
+.track-overall{
+  white-space:nowrap;
+  color:var(--gold)!important;
+}
+.track-boss{
+  white-space:nowrap;
+  padding-left:9px;
+  border-left:1px solid #39414a;
+}
+.track-boss.now{color:#ef7770!important;font-weight:700!important}
+.stage-track.clear{border-color:#466652;background:#101914e8}
+.stage-track.clear .track-status{color:#8fc59f!important}
+.stage-track.boss-live{border-color:#673c3c;background:#1a1011e8}
+.stage-track.boss-live .track-status{color:#e5827b!important}
+.stage-track.defeat{border-color:#6c3838;background:#201112e8}
+.stage-track.defeat .track-status{color:#ef7770!important}
+
+@media(max-width:900px){
+  .game-shell{
+    height:100dvh;
+    min-height:0;
+    grid-template-rows:104px minmax(0,1fr) auto;
+  }
+  .game-main{min-height:0;overflow:auto}
+  .stage-track{grid-template-columns:auto minmax(0,1fr) auto;gap:6px}
+  .track-overall{display:none!important}
+  .track-status{min-width:62px;font-size:8px!important}
+  .track-boss{font-size:8px!important;padding-left:5px}
+  .actions .clear-next{min-width:118px;font-size:10px}
+}
+@media(max-width:520px){
+  .stage-track>span{display:block}
+  .stage-track{grid-template-columns:auto minmax(0,1fr) auto}
+  .track-status{min-width:54px;max-width:54px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .track-boss{max-width:68px;overflow:hidden;text-overflow:ellipsis}
+  .actions{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
