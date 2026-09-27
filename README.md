@@ -55,3 +55,12 @@ Combat balance, class abilities, skills and skill trees, progression, stage type
 Change Floor/Stage, jump to boss stages, start a boss encounter, open shelter, add/clear items, lower or kill combatants, choose BOT personality, toggle Fast Test Mode, advance, or reset the run.
 
 All state is local to the browser and is persisted with `localStorage`.
+
+
+## Prototype polish pass
+
+- Added a compact 1–30 stage route indicator with boss markers at 10/20/30.
+- Mobile action controls now wrap into a touch-friendly grid instead of horizontal scrolling.
+- Using a potion now consumes the player's turn, matching the turn-based interaction model.
+- Fast Test Mode BOT HP now starts at its displayed maximum instead of appearing partially damaged.
+- Added mobile viewport metadata for reliable Vercel/browser rendering.
