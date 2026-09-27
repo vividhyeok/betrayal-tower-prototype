@@ -1,0 +1,9 @@
+import { jobs,normalItems,stageByNumber } from './data'
+import { createBossBattle,createNormalBattle } from './engine'
+import type { ItemData,RunState } from './types'
+const rewardChoices=()=>normalItems.slice().sort(()=>Math.random()-.5).slice(0,3).map((i,n)=>({...i,id:`${i.id}-${Date.now()}-${n}`}))
+export function createRun(jobId:string):RunState{const run:RunState={phase:'BATTLE',floor:1,stageNumber:1,player:{jobId,gold:0,items:[]}};return beginStage(run)}
+export function beginStage(run:RunState):RunState{const stage=stageByNumber(run.stageNumber);const battle=stage.type==='BOSS'?createBossBattle(run.player,jobs.filter(j=>j.id!==run.player.jobId)[Math.floor(Math.random()*3)].id):createNormalBattle(run.player,run.stageNumber,stage.enemyIds[0]);return{...run,phase:'BATTLE',battle,reward:undefined}}
+export function finishBattle(run:RunState):RunState{const battle=run.battle!;if(battle.result==='PLAYER_DEAD'||battle.result==='BOSS_WIN')return{...run,phase:'GAME_OVER'};if(battle.mode==='BOSS'&&battle.phase==='END'){const gained=battle.actors.p1?.items.filter(i=>i.kind==='equipment'&&!run.player.items.some(x=>x.id===i.id))||[];return{...run,phase:'COMPLETE',player:{...run.player,items:[...run.player.items,...gained]}}}const stage=stageByNumber(run.stageNumber),enemyGold=battle.actors.enemy?Math.round((battle.actors.enemy.maxHp/10)):0,gold=stage.goldReward+enemyGold,itemFound=Math.random()<stage.itemDropChance;return{...run,phase:'STAGE_REWARD',player:{...run.player,gold:run.player.gold+gold},reward:{gold,itemFound,choices:itemFound?rewardChoices():[]}}}
+export function chooseStageItem(run:RunState,item?:ItemData):RunState{return item?{...run,player:{...run.player,items:[...run.player.items,item]},reward:{...run.reward!,choices:[]}}:{...run,reward:{...run.reward!,choices:[]}}}
+export function nextStage(run:RunState):RunState{return beginStage({...run,stageNumber:Math.min(10,run.stageNumber+1)})}

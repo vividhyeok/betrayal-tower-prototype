@@ -1,6 +1,6 @@
-# Betrayal Tower — PvPvE Vertical Slice
+# Betrayal Tower — Floor 1 Prototype
 
-React + TypeScript + Vite 기반의 웹 플레이어블 프로토타입입니다. 한 명의 사용자와 한 명의 AI 플레이어가 보스전에 참여하며, 협력과 배신 사이의 판단을 검증합니다.
+React + TypeScript + Vite 기반 턴제 PvPvE 웹 프로토타입입니다. Stage 1부터 장비를 파밍하고 Stage 10에서 AI 플레이어와 협력하거나 배신할 수 있습니다.
 
 ## Run locally
 
@@ -15,35 +15,40 @@ npm run dev
 npm run build
 ```
 
-## Current Vertical Slice
+## Playable Flow
 
-- Player 1(사용자), Player 2(AI), Boss 동시 전투
-- Speed 기반 Turn Queue
-- 기본 공격, 스킬, 방어, 아이템
-- 공격 시 Boss 또는 Other Player 선택
-- 첫 직접 PvP 공격 시 `BETRAYAL`
-- 플레이어 사망 후 생존자와 Boss의 전투 지속
-- Boss 기본 공격, 강한 단일 공격, 광역 공격
-- Boss 저체력 시 강한 행동 확률 증가
-- 4개 데이터 기반 직업과 각 2개 스킬
-- 타짜의 장갑: 보상 주사위 +5
-- 인과응보의 거울: 처음 받은 PvP 피해 100% 반사 후 소모
-- Boss 처치 후 1–100 주사위와 6개 아이템 교차 드래프트
-- PC와 모바일 반응형 UI
+- Stage 1–8: 일반 몬스터 싱글 전투
+- Stage 9: 오우거 엘리트 전투
+- Stage 10: Player 1 + AI Player + Boss PvPvE 전투
+- 일반전 승리: Gold 획득, 확률적으로 장비 3개 중 1개 선택
+- Stage 전환: HP와 Mana 완전 회복
+- Stage 10: 배신, 인과응보의 거울, 타짜의 장갑, 주사위와 교차 드래프트
+
+## Systems
+
+- Speed Turn Queue
+- Accuracy / Evasion / MISS
+- HP / Mana / Skill Mana Cost
+- Base Stats + Item Modifiers
+- Attack, Max HP, Defense, Max Mana, Accuracy, Evasion 장비 효과
+- 일반·엘리트·보스 StageData
+- 공격자/대상 강조, 공격선, Hit Animation, Damage/Heal/Miss Number
+- 플레이어별 배신 상태와 최초 배신 확인 모달
+- AI 최초 배신 중앙 경고
+- StatusEffect 타입 기반: freeze, burn, poison, stun 확장 준비
 
 ## Architecture
 
-- `src/game/types.ts`: 순수 전투/데이터 타입
-- `src/game/data.ts`: 직업, 스킬, 아이템 데이터
-- `src/game/engine.ts`: 전투 판정, 턴 진행, AI, 보상 로직
-- `src/App.tsx`: 화면 상태와 UI 입력 연결
-
-전투 엔진은 UI 컴포넌트를 참조하지 않습니다. 이후 네트워크 명령이나 서버 권위 모델로 교체할 때 동일한 `BattleAction` 입력 구조를 사용할 수 있습니다.
+- `src/game/types.ts`: 데이터와 상태 계약
+- `src/game/data.ts`: Job, Skill, Enemy, Item, Stage 데이터
+- `src/game/engine.ts`: 전투, 턴, 명중, 피해, AI, 배신, 보스 Loot
+- `src/game/stageEngine.ts`: Run 진행, Stage 연결, 일반전 보상
+- `src/App.tsx`: UI와 사용자 입력
 
 ## Out of Scope
 
-온라인 매칭, Steam 연동, 음성채팅, 장기 성장, 장비 장착, 스테이지 진행, 저장 상자, 실제 아이템 약탈은 이번 Vertical Slice에 포함하지 않습니다.
+온라인 매칭, Steam 연동, 음성채팅, 실제 아이템 약탈, 장비 슬롯 제한, reroll, 장기 저장, 상태이상의 실제 전투 적용은 이후 범위입니다.
 
 ## Deployment
 
-루트의 `vercel.json`을 사용해 Vercel에 Vite SPA로 배포할 수 있습니다.
+`vercel.json`을 이용해 Vercel에 Vite SPA로 배포할 수 있습니다.
