@@ -39,7 +39,6 @@ button:disabled{opacity:.35;cursor:not-allowed}
 
 .game-shell{
  height:100dvh;
- min-height:620px;
  overflow:hidden;
  background:linear-gradient(rgba(5,8,11,.75),rgba(5,8,11,.94));
  display:grid;
@@ -261,7 +260,6 @@ mark{background:#302b20;color:#d7bd81;padding:4px;font-size:10px}
  .class-grid{grid-template-columns:repeat(2,1fr)}
  .game-shell{
   height:100dvh;
-  min-height:520px;
   grid-template:150px minmax(0,1fr) 104px/1fr;
   grid-template-areas:'top' 'main' 'actions'
  }
